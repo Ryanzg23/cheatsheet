@@ -63,6 +63,7 @@
     .copy-button:hover {
       background-color: #0056b3;
     }
+	  .httpclr{ color: #f43f41; font-weight: bold; }
 	  
   </style>
 </head>
@@ -71,10 +72,11 @@
     <button onclick="toggleDiv(1)">Excerpt function</button>
     <button onclick="toggleDiv(2)">Excerpt content</button>
     <button onclick="toggleDiv(9)">Featured Image</button>
-    <button onclick="toggleDiv(8)">For NEW Read more Task</button>
+    <button onclick="toggleDiv(4)">Domain Origin</button>
+    <button onclick="toggleDiv(8)">301 to Homepage</button>
     <button onclick="toggleDiv(7)">PBN Robots.txt</button>
     <button onclick="toggleDiv(3)">Meta Robots</button>
-    <button onclick="toggleDiv(4)">Force Canonical Origin (Yoast)</button>
+<!--    <button onclick="toggleDiv(8)">For NEW Read more Task</button>-->
     <button onclick="toggleDiv(5)">Footer function</button>
     <button onclick="toggleDiv(6)">Footer code</button>
 <!--	<button onclick="window.open('https://garansigacor.top/AUTOMATE_PBN/', '_blank')">Domain Origin Generator</button>-->
@@ -220,21 +222,81 @@ add_filter('aioseo_robots_meta', 'aioseo_filter_robots_meta');
 </section>
 	</div>
   <div id="div4" class="content-div">
-	<p>This code forces the canonical URL of the domain to its origin, as sometimes SEO plugins generate canonicals that differ from the original.<br><br>
-		Copy and Paste this code to your functions.php, just change the example.com to your domain.</p>
-
+	  
+<div id="allhttps">
+<p>Redirect all to <span class="httpclr">HTTPS &amp; HTTPS WWW</span></p>
 <pre><code>
-// Remove Yoast SEO's canonical URL
-add_filter('wpseo_canonical', '__return_false');
+RewriteEngine On
 
-// Add your custom canonical URL
-function custom_canonical_url() {
-    echo '&lt;link rel="canonical" href="https://example.com/" /&gt;';
-}
-add_action('wp_head', 'custom_canonical_url');
-
+# Redirect all HTTP requests to HTTPS, preserving www or non-www
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 </code></pre>
-            <button class="copy-button" onclick="copyCode('div4')">Copy Code</button>
+<button class="copy-button" onclick="copyCode('allhttps')">Copy Code</button>
+</div>
+	 <br>
+<div id="https">
+<p>Redirect all to <span class="httpclr">HTTPS</span></p>
+<pre><code>
+RewriteEngine On
+RewriteBase /
+
+# Redirect www to non-www (works for both HTTP and HTTPS)
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+# Redirect HTTP to HTTPS for non-www
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP_HOST} !^www\. [NC]
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+</code></pre>
+<button class="copy-button" onclick="copyCode('https')">Copy HTTPS</button>
+</div>
+	 <br>
+<div id="httpswww">
+<p>Redirect all to <span class="httpclr">HTTPS WWW</span></p>
+<pre><code>
+RewriteEngine On
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} !^www\. [NC]
+RewriteCond %{HTTP_HOST} ^(?:www\.)?(.+)$ [NC]
+RewriteRule ^ https://www.%1%{REQUEST_URI} [L,NE,R=301]
+</code></pre>
+<button class="copy-button" onclick="copyCode('httpswww')">Copy HTTPS WWW</button>
+</div>
+	 <br>
+<div id="http">
+<p>Redirect all to <span class="httpclr">HTTP</span></p>
+<pre><code>
+RewriteEngine On
+RewriteBase /
+
+# Redirect www to non-www (any domain)
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
+
+# Redirect HTTPS to HTTP (only for non-www)
+RewriteCond %{HTTPS} on
+RewriteCond %{HTTP_HOST} !^www\. [NC]
+RewriteRule ^(.*)$ http://%{HTTP_HOST}/$1 [R=301,L]
+</code></pre>
+<button class="copy-button" onclick="copyCode('http')">Copy HTTP</button>
+</div>
+	 <br>
+<div id="httpwww">
+<p>Redirect all to <span class="httpclr">HTTP WWW</span></p>
+<pre><code>
+&lt;IfModule mod_rewrite.c&gt;
+ RewriteEngine On
+ RewriteCond %{HTTPS} on [OR]
+ RewriteCond %{HTTP_HOST} !^www\. [NC]
+ RewriteCond %{HTTP_HOST} ^(?:www\.)?(.+)$ [NC]
+ RewriteRule ^ http://www.%1%{REQUEST_URI} [L,NE,R=301]
+&lt;/IfModule&gt;
+</code></pre>
+<button class="copy-button" onclick="copyCode('httpwww')">Copy HTTP WWW</button>
+</div>
+	  
 	  
 	  
 	</div>
@@ -474,7 +536,30 @@ Sitemap: http://farmingtonhistoricplantation.org/sitemap.xml
 </code></pre>
 
 </div>
+	
+	
+<div id="div8" class="content-div">
+	
+	<section id="redirecttohomepage">
+			<p>This code redirects all 404 to homepage. Paste this on your htaccess code.</p>
+			<p><b>Don't forget to change the domain for your site.</b></p>
 
+<pre><code>
+RewriteEngine On
+# Redirect all non-existing files/folders to homepage (strips query)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ https://chihuahuapuppiesonsale.com/? [R=301,L]
+ 
+# Redirect homepage with query string to clean homepage
+RewriteCond %{THE_REQUEST} \s/+\? [NC]
+RewriteRule ^$ https://chihuahuapuppiesonsale.com/? [R=301,L]
+</code></pre>
+	<button class="copy-button" onclick="copyCode('redirecttohomepage')">Copy Code</button>
+
+		</section>	
+</div>
+<!--
 <div id="div8" class="content-div">
 	
 	<section id="forcategexcerpt">
@@ -493,7 +578,8 @@ if ( is_home() || is_front_page() || is_single() ) {
 		
 	<section id="fcwithreadmorestyle">
   
-	    	<p>This code is an alternative for the code on the first tab, this already contains the style for the read more button so you don't need to copy and paste the css on your dashboard theme customize.</p>
+	    	<p>This code already contains the style for the read more button so you don't need to copy and paste the css on your dashboard theme customize. Copy and Paste this on your theme's functions.php.</p>
+	    	<p>Additional: 25 Articles Max on Homepage code included.</p>
   <button class="copy-button" onclick="copyCode('fcwithreadmorestyle')">Copy Code Below</button>
   
   <pre><code>
@@ -535,10 +621,13 @@ function limit_homepage_posts( $query ) {
     }
 }
 add_action( 'pre_get_posts', 'limit_homepage_posts' );
+
+add_filter( 'auto_update_plugin', '__return_true' );
   </code></pre>
 	</section>
 	
 </div>
+-->
 
 <div id="div9" class="content-div">
 		
