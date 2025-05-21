@@ -64,7 +64,10 @@
       background-color: #0056b3;
     }
 	  .httpclr{ color: #f43f41; font-weight: bold; }
-	  
+	  #div4{ max-width: 1100px; }
+	  #div4 .flexdiv4{ display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+	  #div4 .flexdiv4>div{ width: 47%; }
+	  #div4 .flexdiv4>div code{ font-size: 12px; }
   </style>
 </head>
 <body>
@@ -222,7 +225,10 @@ add_filter('aioseo_robots_meta', 'aioseo_filter_robots_meta');
 </section>
 	</div>
   <div id="div4" class="content-div">
-	  
+	<div class="flexdiv4">
+		
+	<div>
+		
 <div id="allhttps">
 <p>Redirect all to <span class="httpclr">HTTPS &amp; HTTPS WWW</span></p>
 <pre><code>
@@ -263,8 +269,12 @@ RewriteCond %{HTTP_HOST} ^(?:www\.)?(.+)$ [NC]
 RewriteRule ^ https://www.%1%{REQUEST_URI} [L,NE,R=301]
 </code></pre>
 <button class="copy-button" onclick="copyCode('httpswww')">Copy HTTPS WWW</button>
-</div>
-	 <br>
+</div>	
+		
+	</div>	
+
+	<div>
+		
 <div id="http">
 <p>Redirect all to <span class="httpclr">HTTP</span></p>
 <pre><code>
@@ -296,8 +306,15 @@ RewriteRule ^(.*)$ http://%{HTTP_HOST}/$1 [R=301,L]
 </code></pre>
 <button class="copy-button" onclick="copyCode('httpwww')">Copy HTTP WWW</button>
 </div>
+		
+	</div>
+
+	 <br>
+
 	  
-	  
+		
+		
+	</div>    
 	  
 	</div>
   <div id="div5" class="content-div">
