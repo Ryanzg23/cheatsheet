@@ -68,6 +68,51 @@
 	  #div4 .flexdiv4{ display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
 	  #div4 .flexdiv4>div{ width: 47%; }
 	  #div4 .flexdiv4>div code{ font-size: 12px; }
+	  
+	  
+	  
+	 .generatedomain input[type="text"] {
+		  width: 300px;
+		  padding: 10px;
+		  font-size: 1rem;
+		  border: 1px solid #444;
+		  border-radius: 5px;
+		  margin-right: 10px;
+		}
+
+	.generatedomain button {
+		  padding: 10px 15px;
+		  font-size: 1rem;
+		  cursor: pointer;
+		  background-color: #1e88e5;
+		  color: white;
+		  border: none;
+		  border-radius: 5px;
+		}
+
+	.generatedomain button:disabled {
+		  background-color: #555;
+		  cursor: not-allowed;
+		}
+
+	.generatedomain .results {
+		  margin-top: 20px;
+		}
+
+	.generatedomain .output-block {
+		  background: #ccc;
+			font-size: 15px;
+		  padding: 10px;
+		  border: 1px solid #444;
+		  border-radius: 5px;
+		  max-width: 500px;
+		  white-space: pre-line;
+		  word-break: break-word;
+		}
+	  .generatedomain{ margin-bottom: 30px; }
+	  .generatedomain .btnhttpstatus{ display: flex; align-items: center; justify-content: space-between; }
+	  .generatedomain .btnhttpstatus a{ background-color: #c7494b; color: white; border-radius: 5px; padding: 10px 15px; text-decoration: none; }
+	  .generatedomain .btnhttpstatus a:hover{ background-color: #5c0809; }
   </style>
 </head>
 <body>
@@ -274,6 +319,21 @@ RewriteRule ^ https://www.%1%{REQUEST_URI} [L,NE,R=301]
 	</div>	
 
 	<div>
+		
+	<div class="generatedomain">
+		<p>Generate Domain</p>
+		<input type="text" id="domainInput" placeholder="Enter domain e.g. sample.com">
+		<button onclick="generateVariants()">Generate</button>
+		  <div class="results" id="resultsContainer" style="display:none;">
+			<p id="outputBlock" class="output-block"></p><br>
+			<div class="btnhttpstatus">
+				<button id="copyBtn" onclick="copyResults()">Copy All</button>
+				<a href="https://httpstatus.io/" target="_blank">httpstatus.io</a>
+			</div>
+		  </div>
+		
+	</div>
+		
 		
 <div id="http">
 <p>Redirect all to <span class="httpclr">HTTP</span></p>
@@ -719,6 +779,50 @@ add_filter('post_thumbnail_html', 'custom_post_thumbnail', 10, 5);
   }
 	  
 	  
+ // script for domain generation
+	  
+	function extractDomain(input) {
+      try {
+        const url = new URL(input.includes("://") ? input : "http://" + input);
+        return url.hostname.replace(/^www\./, '');
+      } catch (e) {
+        return input.trim().replace(/^(https?:\/\/)?(www\.)?/, '').split('/')[0];
+      }
+    }
+
+    function generateVariants() {
+      const input = document.getElementById("domainInput").value.trim();
+      if (!input) return;
+
+      const domain = extractDomain(input);
+      const urls = [
+        `https://www.${domain}`,
+        `https://${domain}`,
+        `http://www.${domain}`,
+        `http://${domain}`
+      ];
+
+      const output = urls.join('\n');
+      document.getElementById("outputBlock").textContent = output;
+      document.getElementById("resultsContainer").style.display = 'block';
+    }
+
+    function copyResults() {
+      const text = document.getElementById("outputBlock").textContent;
+      const button = document.getElementById("copyBtn");
+
+      navigator.clipboard.writeText(text).then(() => {
+        button.textContent = "Copied!";
+        button.disabled = true;
+
+        setTimeout(() => {
+          button.textContent = "Copy All";
+          button.disabled = false;
+        }, 1500);
+      });
+    }
+	  
   </script>
+
 </body>
 </html>
